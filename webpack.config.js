@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const { resolve } = require('path');
 
 module.exports = {
 
@@ -24,7 +25,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, './build'),
-        filename: '[name].bundle.js',
+        filename: '[name].[contenthash].bundle.js',
         clean: true,
         assetModuleFilename: "assets/[hash][ext][query]",
     },
