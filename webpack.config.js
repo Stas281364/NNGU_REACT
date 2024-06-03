@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
 
@@ -28,6 +29,16 @@ module.exports = {
         assetModuleFilename: "assets/[hash][ext][query]",
     },
 
+    resolve: {
+        fallback: { path: false },
+        extensions: ['.ts', '.tsx', '.js'],
+        plugins: [
+          new TsconfigPathsPlugin({
+            configFile: resolve(process.cwd(), 'tsconfig.json'),
+          }),
+        ],
+    },
+
     plugins: [
         new HtmlWebpackPlugin(
             {template: './src/index.html'},
@@ -36,7 +47,6 @@ module.exports = {
         new MiniCssExtractPlugin(
             {filename: "[name].[contenthash].css",},
         ),
-
     ],
 
     module:{
@@ -54,11 +64,16 @@ module.exports = {
             },
 
             {
-                test: /\.js$/,
+                test: /\.(ts|js)x?$/,
                 exclude: /node_modules/,
-                use: {
-                loader: "babel-loader"
-                }
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                         configFile: path.resolve(process.cwd(), 'babel.config.js'),
+                        },
+                    }
+                ]
             }
             
 
